@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "Developer Toolkit",
+    "version": "1.0",
+    "description": "Useful developer tools available from your browser context menu for developers.",
+    "permissions": [
+        "contextMenus",
+        "activeTab",
+        "scripting"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "action": {
+        "default_title": "Developer Toolkit"
+    }
+}
