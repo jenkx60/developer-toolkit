@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Toolkit</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <main class="popup">
+        <header class="header">
+            <div>
+                <h1>Developer Toolkit</h1>
+                <p>Quick developer tools</p>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="toolkit-toggle">
+                <span class="slider"></span>
+            </label>
+        </header>
+
+        <section class="history-section">
+            <div class="section-header">
+                <h2>Recent Copies</h2>
+                <button id="clear-history">Clear</button>
+            </div>
+
+            <div id="history-list">
+                <p class="empty-state">Nothing copied yet.</p>
+            </div>
+        </section>
+    </main>
+    <script src="popup.js"></script>
+</body>
+</html>

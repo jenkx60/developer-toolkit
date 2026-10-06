@@ -1,17 +1,47 @@
 let selectedElement = null; 
 let hoveredElement = null;
+let toolkitEnabled = true;
+
+// Get the toolkit enabled state from the extension storage
+chrome.storage.local.get("toolkitEnabled", (result) => {
+    toolkitEnabled = result.toolkitEnabled ?? true;
+});
+
+chrome.storage.onChanged.addListener((changes) => {
+    if (!changes.toolkitEnabled) {
+        return;
+    }
+
+    toolkitEnabled = changes.toolkitEnabled.newValue;
+
+    if (!toolkitEnabled) {
+        if (hoveredElement) {
+            hoveredElement.classList.remove("developer-toolkit-highlight");
+        };
+    }
+
+    hoveredElement = null;
+    selectedElement = null;
+})
 
 // Add extenstion styles when the content script loads
 addHighlightStyle();
 
 // Track the hovered element and highlight it
 document.addEventListener("mouseover", (event) => {
+    if (!toolkitEnabled) {
+        return;
+    }
     hoveredElement = event.target;
     highlightElement(hoveredElement);
 });
 
 // Capture the element that was right-clicked
 document.addEventListener("contextmenu", (event) => {
+    if (!toolkitEnabled) {
+        return;
+    }
+
     selectedElement = event.target;
 
     //Remove the hover highlight after selecting an element
@@ -27,6 +57,10 @@ document.addEventListener("contextmenu", (event) => {
 
 chrome.runtime.onMessage.addListener((message) => {
     console.log("Tool requested:", message.action);
+
+    if (message.action === "toolkit-disabled") {
+        showToast("Toolkit is off. Turn it on to use this tool.")
+    }
 
     switch (message.action) {
         case "copy-html":

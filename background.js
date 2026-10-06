@@ -54,7 +54,16 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     // console.log("Tab:", tab);
     if (!tab.id) return;
 
-    chrome.tabs.sendMessage(tab.id, {
-        action: info.menuItemId
-    });
+    chrome.storage.local.get(["toolkitEnabled"], (result) => {
+        const isEnabled = result.toolkitEnabled ?? true;
+        if (!isEnabled) {
+            chrome.tabs.sendMessage(tab.id, {
+                action: "toolkit-disabled"
+            });
+            return;
+        }
+        chrome.tabs.sendMessage(tab.id, {
+            action: info.menuItemId
+        });
+    })
 });
